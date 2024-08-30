@@ -131,7 +131,7 @@ try {
 			let selectedColor = colors[Math.floor(Math.random() * colors.length)];
 
 			let filename = getRandomFilename();
-			let cmd = `start ffmpeg -i ${mainVideoPath} -i ${musicPath} -f lavfi -i "color=${selectedColor.hex}:s=32x32" -c:a aac -filter_complex "[2:v][0:v]scale2ref=iw:ih[color][main];[main][color]blend=shortest=1:all_mode=overlay:all_opacity=0.1[v]; [v]subtitles=${subtitlesFilePath.replaceAll(/\\/g, '\\\\\\\\').replaceAll(/:/g, '\\\\:')}:fontsdir=${fontFilesDirectoryPath.replaceAll(/\\/g, '\\\\\\\\').replaceAll(/:/g, '\\\\:')}:force_style='Alignment=2,MarginV=70,Fontname=${fontName},PrimaryColour=${selectedColor.ass}'[vout]; [0:a][1:a]amix=inputs=2:duration=shortest[aout];" -map "[vout]" -map "[aout]" ${join(currentOutputDirectoryPath, filename)}`
+			let cmd = `start ffmpeg -i ${mainVideoPath} -i ${musicPath} -f lavfi -i "color=${selectedColor.hex}:s=32x32" -c:a aac -c:v libx264 -filter_complex "[2:v][0:v]scale2ref=iw:ih[color][main];[main][color]blend=shortest=1:all_mode=overlay:all_opacity=0.1[v]; [v]subtitles=${subtitlesFilePath.replaceAll(/\\/g, '\\\\\\\\').replaceAll(/:/g, '\\\\:')}:fontsdir=${fontFilesDirectoryPath.replaceAll(/\\/g, '\\\\\\\\').replaceAll(/:/g, '\\\\:')}:force_style='Alignment=2,MarginV=70,Fontname=${fontName},PrimaryColour=${selectedColor.ass}'[vout]; [0:a][1:a]amix=inputs=2:duration=shortest[aout];" -map "[vout]" -map "[aout]" ${join(currentOutputDirectoryPath, filename)}`
 			spawnSync(cmd, [], {shell: true})
 		}
 	}
